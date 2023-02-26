@@ -10,6 +10,8 @@ const RegisterPage = () => {
     password: "",
     firstName: "",
     lastName: "",
+    isAdmin:"",
+    isApprover:"",
   };
   const [formData, handleInputChange, handleSubmit] = useCustomForm(
     defaultValues,
@@ -61,6 +63,24 @@ const RegisterPage = () => {
             type="text"
             name="password"
             value={formData.password}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Is Admin:{" "}
+          <input
+            type="text"
+            name="is_admin"
+            value={formData.isAdmin}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Is Approver:{" "}
+          <input
+            type="text"
+            name="is_approver"
+            value={formData.isApprover}
             onChange={handleInputChange}
           />
         </label>

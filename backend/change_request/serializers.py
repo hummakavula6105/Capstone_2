@@ -24,7 +24,6 @@ class AreaSerializer(serializers.ModelSerializer):
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
-        fields = ['id', 'request_id', 'date_requested', 'expiration_date', 'area', 'reason_for_request', 'description_of_change', 'is_approved', 'is_rejected']
+        fields = ['id', 'date_requested', 'expiration_date', 'area', 'reason_for_request', 'description_of_change', 'tasks', 'is_approved', 'is_rejected']
         depth = 1
 
-    request_id = serializers.IntegerField(write_only=True)

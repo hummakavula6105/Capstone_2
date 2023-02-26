@@ -41,35 +41,37 @@ const App = () => {
 }
 
   return (
-    <div>
-      <div>
-        <Navbar />
-      </div>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <HomePage />
-                <div className="flex--container">
-                  <div className="left-container">
+    <body>
+        <div>
+          <div>
+            <Navbar />
+          </div>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <HomePage />
+                    <div className="flex--container">
                     <SearchBar query ={query} setQuery={setQuery}/>
                     <ShowAllRequests parentEntries={requests} query={query}/>
-                    <NewRequest addNewRequest={addNewRequest}/>
                     <button onClick={(e) => getRequests()}>See All Requests</button>
-                  </div>
-                <div className="right-container">
-                  <BarGraph/>
-                </div>
-                </div>
-            </PrivateRoute>
-          }
-        />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
-      </Routes>
-      <Footer />
-    </div>
+                      <div className="left-container">
+                        <NewRequest addNewRequest={addNewRequest}/>
+                      </div>
+                    <div className="right-container">
+                      <BarGraph/>
+                    </div>
+                    </div>
+                </PrivateRoute>
+              }
+            />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+          {/* <Footer /> */}
+        </div>
+    </body>
   );
 }
 

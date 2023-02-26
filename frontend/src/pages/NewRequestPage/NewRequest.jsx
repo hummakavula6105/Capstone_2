@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import DateTimePicker from "react-datetime-picker"
 import ButtonHandler from "./ButtonHandler";
@@ -11,6 +11,7 @@ const NewRequest = ({addNewRequest}) => {
   const [area, setArea] = useState("");
   const [reasonForRequest, setReasonForRequest] = useState("");
   const [descriptionOfChange, setDescriptionOfChange] = useState("");
+  const [tasks, setTasks] = useState("");
   const [isApproved, setIsApproved] = useState("");
   const [isRejected, setIsRejected] = useState("");
   const [user, token] = useAuth();
@@ -25,15 +26,63 @@ const NewRequest = ({addNewRequest}) => {
       expiration_date: expirationDate,
       reason_for_request: reasonForRequest,
       description_of_change: descriptionOfChange,
-      is_approved: isApproved,
-      is_rejected: isRejected,
     };
     console.log(newRequest);
     addNewRequest(newRequest)
   }
 
+    
+//   const handleApprove = () => {
+//     method: 'PUT',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authoriztion': 'Bearer my-token',
+//       'My-Custom-Header': 'foobar'
+//     },
+//     body: JSON.stringify({ title: 'Review Change Request' })
+// };
+// fetch('http://127.0.0.1:8000/api/requests/new/', requestOptions)
+//     .then(response => response.json())
+//     .then(data => setPostId(data.id));
+//   }, [])};
+  
+//   const handleReject = () => {
+//     method: 'PUT',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authoriztion': 'Bearer my-token',
+//       'My-Custom-Header': 'foobar'
+//     },
+//     body: JSON.stringify({ title: 'Review Change Request' })
+// };
+// fetch('http://127.0.0.1:8000/api/requests/new/', requestOptions)
+//     .then(response => response.json())
+//     .then(data => setPostId(data.id));
+//   }, []
+//   }
+  
+//   if (submitted) {
+//     return <Revision
+//       formData={formData}
+//       handleApprove={handleApprove}
+//       handleReject={handleReject}
+//     />
+//   } else {
+//     return <Form 
+//       submitting={submitting}
+//       handleSubmit={handleSubmit} 
+//       formData={formData}
+//       setFormData={setFormData}
+//     />
+//   }
+
+// ReactDOM.render(
+//   <App />,
+//   document.getElementById('container')
+// );
+
   return (
-    <body>
+    <div>
       <label className="New-Request-Label">New Request</label>
       <form onSubmit={handleSubmit} className="form-grid">
         <section className="main section">
@@ -58,19 +107,15 @@ const NewRequest = ({addNewRequest}) => {
             <input type="text"value={descriptionOfChange}onChange={(event) => setDescriptionOfChange(event.target.value)} />
           </div>
           <div>
-            <label>Is Approved</label>
-            <input type="choice"value={isApproved}onChange={(event) => setIsApproved(event.target.value)} />
-          </div>
-          <div>
-            <label>Is Rejected</label>
-            <input type="choice"value={isRejected}onChange={(event) => setIsRejected(event.target.value)} />
+            <label>Tasks</label>
+            <input type="text" value={tasks} onChange={(event) => setTasks(event.target.value)} />
           </div>
           <div>
             <ButtonHandler type="submit"className="btn btn-primary"style={{ marginTop: "1em" }}>Submit</ButtonHandler>
           </div>
         </section>
       </form>
-    </body>
+    </div>
   );
 };
 

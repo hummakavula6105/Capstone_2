@@ -36,17 +36,17 @@ def new_request(request):
         request = Request.objects.filter(request_id=request.query_params.get("request_id"))
         serializer = RequestSerializer(request, many=True)
         return Response(serializer.data)
-# def approve_or_reject_request(request):
-#     try:
-#         request_id = int(request.data['request_id'])
-#         approver = Request.objects.get(request_id=request_id, user=request.user)
-#         is_approved = request.data.get('is_approved', False)
-#         is_rejected = request.data.get('is_rejected', False)
-#         if is_approved and is_rejected:
-#             return Response({'message': 'Cannot approve and reject request at the same time'}, status=status.HTTP_400_BAD_REQUEST)
-#         approver.is_approved = is_approved
-#         approver.is_rejected = is_rejected
-#         approver.save()
-#         return Response({'message': 'Request updated'}, status=status.HTTP_200_OK)
-#     except (KeyError, ValueError):
-#         return Response({'message': 'Invalid request ID or user not authorized'}, status=status.HTTP_400_BAD_REQUEST)
+def approve_or_reject_request(request):
+    try:
+        request_id = int(request.data['request_id'])
+        approver = Request.objects.get(request_id=request_id, user=request.user)
+        is_approved = request.data.get('is_approved', False)
+        is_rejected = request.data.get('is_rejected', False)
+        if is_approved and is_rejected:
+            return Response({'message': 'Cannot approve and reject request at the same time'}, status=status.HTTP_400_BAD_REQUEST)
+        approver.is_approved = is_approved
+        approver.is_rejected = is_rejected
+        approver.save()
+        return Response({'message': 'Request updated'}, status=status.HTTP_200_OK)
+    except (KeyError, ValueError):
+        return Response({'message': 'Invalid request ID or user not authorized'}, status=status.HTTP_400_BAD_REQUEST)

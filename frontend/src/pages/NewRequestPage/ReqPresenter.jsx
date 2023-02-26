@@ -1,14 +1,6 @@
 import React from 'react';
 import styled from "styled-components";
 
-const colorArray=[
-    "#003049",
-    "#d62828",
-    "#f77f00",
-    "#fcbf49",
-    "#eae2b7",
-]
-
 const Panel = styled.li`
 width: 300px;
 padding: 1rem;
@@ -22,7 +14,7 @@ font-size: 13px
 
 const ReqPresenter = ({request, changeRequest}) => {
     return ( 
-        <Panel style={{backgroundColor: `${colorArray[Math.floor(Math.random()*colorArray)]}`}}>
+        <Panel>
             <button onClick={changeRequest}>
                 <h2 id={request.id.requestId}>{request.id}</h2>
             </button>

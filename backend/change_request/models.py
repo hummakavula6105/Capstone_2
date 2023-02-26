@@ -3,10 +3,6 @@ from authentication.models import User
 
 # Create your models here.
 
-class User(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    isApprover = models.BooleanField(default=False)
-    isAdmin = models.BooleanField(default=False)
 
 class Area(models.Model):
     ETM = 'ETM'
@@ -32,6 +28,7 @@ class Request(models.Model):
     )
     reason_for_request = models.CharField(max_length=800)
     description_of_change = models.CharField(max_length=800)
+    tasks = models.CharField(max_length=800)
     is_approved = models.BooleanField(default=False)
     is_rejected = models.BooleanField(default=False)
     
