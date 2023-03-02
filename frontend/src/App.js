@@ -60,7 +60,7 @@ const App = () => {
                         <NewRequest addNewRequest={addNewRequest}/>
                       </div>
                     <div className="right-container">
-                      <BarGraph/>
+                      {/* <BarGraph/> */}
                     </div>
                     </div>
                 </PrivateRoute>

@@ -6,7 +6,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import status
 from .models import Request
 from .serializers import RequestSerializer
-from authentication.models import User
 
 # Create your views here.
 

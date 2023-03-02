@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
-import DateTimePicker from "react-datetime-picker"
 import ButtonHandler from "./ButtonHandler";
+import axios from "axios";
 
 
 const NewRequest = ({addNewRequest}) => {
@@ -12,23 +12,27 @@ const NewRequest = ({addNewRequest}) => {
   const [reasonForRequest, setReasonForRequest] = useState("");
   const [descriptionOfChange, setDescriptionOfChange] = useState("");
   const [tasks, setTasks] = useState("");
-  const [isApproved, setIsApproved] = useState("");
-  const [isRejected, setIsRejected] = useState("");
+  const [isApproved, setIsApproved] = useAuth();
+  const [isRejected, setIsRejected] = useAuth();
   const [user, token] = useAuth();
 
-  function handleSubmit(event) {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     let newRequest = {
       user_id: user.id,
       request_id: requestId,
-      area: area,
-      date_requested: dateRequested,
-      expiration_date: expirationDate,
-      reason_for_request: reasonForRequest,
-      description_of_change: descriptionOfChange,
+      date: setDateRequested,
+      date: setExpirationDate,
+      text1: area,
+      text2: reasonForRequest,
+      text3: descriptionOfChange,
+      is_approved: 0,
+      is_rejected: 0,
+      text4: tasks,
     };
-    console.log(newRequest);
-    addNewRequest(newRequest)
+    let response = await axios.post('http://127.0.0.1:8000/api/requests/new/', newRequest, {headers:{Authorization: `Bearer ${token}`}})
+    console.log(response.data);
+    addNewRequest();
   }
 
     
@@ -85,8 +89,7 @@ const NewRequest = ({addNewRequest}) => {
     <div>
       <label className="New-Request-Label">New Request</label>
       <form onSubmit={handleSubmit} className="form-grid">
-        <section className="main section">
-          <div>
+      <div>
             <label>Date Requested</label>
             <input type="date"value={dateRequested}onChange={(event) => setDateRequested(event.target.value)} />
           </div>
@@ -96,19 +99,20 @@ const NewRequest = ({addNewRequest}) => {
           </div>
           <div>
             <label>Area</label>
-            <input type="text"value={area}onChange={(event) => setArea(event.target.value)} />
+            <input type="text1" value={area}onChange={(event) => setArea(event.target.value)} />
           </div>
+        <section className="main section">
           <div>
             <label>Reason for Request</label>
-            <input type="text"value={reasonForRequest}onChange={(event) => setReasonForRequest(event.target.value)} />
+            <input type="text2"value={reasonForRequest}onChange={(event) => setReasonForRequest(event.target.value)} />
           </div>
           <div>
             <label>Description of Change</label>
-            <input type="text"value={descriptionOfChange}onChange={(event) => setDescriptionOfChange(event.target.value)} />
+            <input type="text3"value={descriptionOfChange}onChange={(event) => setDescriptionOfChange(event.target.value)} />
           </div>
           <div>
             <label>Tasks</label>
-            <input type="text" value={tasks} onChange={(event) => setTasks(event.target.value)} />
+            <input type="text4" value={tasks} onChange={(event) => setTasks(event.target.value)} />
           </div>
           <div>
             <ButtonHandler type="submit"className="btn btn-primary"style={{ marginTop: "1em" }}>Submit</ButtonHandler>

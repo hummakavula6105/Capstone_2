@@ -1,17 +1,8 @@
 from dataclasses import fields
 from rest_framework import serializers
-from .models import User
 from .models import Area
 from .models import Request
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'user', 'isApprover', 'isAdmin']
-        depth = 1
-
-    user_id = serializers.IntegerField(write_only=True)
 
 
 class AreaSerializer(serializers.ModelSerializer):

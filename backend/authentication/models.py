@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    isApprover = models.BooleanField(default=False)
-    isAdmin = models.BooleanField(default=False)
+    is_approver = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     pass
     '''
     This is a custom version of the built in User class
