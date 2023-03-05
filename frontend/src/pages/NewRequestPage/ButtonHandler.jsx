@@ -16,7 +16,7 @@ const ButtonHandler = (props) => {
     }
     return ( 
         <div>
-            <Button handleClick= {handleClick} buttonClass={buttonClass}/>
+            <Button handleClick= {handleClick} buttonClass={buttonClass} />
         </div>
      );
 }

@@ -15,75 +15,46 @@ const NewRequest = ({addNewRequest}) => {
   const [isApproved, setIsApproved] = useAuth();
   const [isRejected, setIsRejected] = useAuth();
   const [user, token] = useAuth();
+  const [value, setValue] = useState("");
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
 
   const handleSubmit = async(event) => {
     event.preventDefault();
     let newRequest = {
-      user_id: user.id,
-      request_id: requestId,
-      date: setDateRequested,
-      date: setExpirationDate,
-      text1: area,
-      text2: reasonForRequest,
-      text3: descriptionOfChange,
-      is_approved: 0,
-      is_rejected: 0,
-      text4: tasks,
+      date_requested: dateRequested,
+      expiration_date: expirationDate,
+      area: area,
+      reason_for_request: reasonForRequest,
+      description_of_change: descriptionOfChange,
+      tasks: tasks,
     };
-    let response = await axios.post('http://127.0.0.1:8000/api/requests/new/', newRequest, {headers:{Authorization: `Bearer ${token}`}})
-    console.log(response.data);
-    addNewRequest();
-  }
 
-    
-//   const handleApprove = () => {
-//     method: 'PUT',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authoriztion': 'Bearer my-token',
-//       'My-Custom-Header': 'foobar'
-//     },
-//     body: JSON.stringify({ title: 'Review Change Request' })
-// };
-// fetch('http://127.0.0.1:8000/api/requests/new/', requestOptions)
-//     .then(response => response.json())
-//     .then(data => setPostId(data.id));
-//   }, [])};
-  
-//   const handleReject = () => {
-//     method: 'PUT',
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authoriztion': 'Bearer my-token',
-//       'My-Custom-Header': 'foobar'
-//     },
-//     body: JSON.stringify({ title: 'Review Change Request' })
-// };
-// fetch('http://127.0.0.1:8000/api/requests/new/', requestOptions)
-//     .then(response => response.json())
-//     .then(data => setPostId(data.id));
-//   }, []
-//   }
-  
-//   if (submitted) {
-//     return <Revision
-//       formData={formData}
-//       handleApprove={handleApprove}
-//       handleReject={handleReject}
-//     />
-//   } else {
-//     return <Form 
-//       submitting={submitting}
-//       handleSubmit={handleSubmit} 
-//       formData={formData}
-//       setFormData={setFormData}
-//     />
-//   }
+    try{
+      let response = await axios.post('http://127.0.0.1:8000/api/requests/new/', newRequest, {headers:{Authorization: `Bearer ${token}`}})
+      console.log(response.data);
+      addNewRequest();
+    }catch(error){
+      console.log(error.response.data)
+    }
+  };
 
-// ReactDOM.render(
-//   <App />,
-//   document.getElementById('container')
-// );
+  const handleReview = async (event) => {
+    event.preventDefault();
+    let review = {
+      is_approved: isApproved,
+      is_rejected: isRejected,
+    };
+
+    try{
+      let response = await axios.put('http://127.0.0.1:8000/api/requests/approve_or_reject_request/', isApproved, isRejected, {headers:{Authorization: `Bearer ${token}`}});
+      console.log(response.data);
+      addNewRequest();
+    }catch(error){
+      console.log(error.response.data)
+    }
+  };
 
   return (
     <div>
@@ -99,20 +70,27 @@ const NewRequest = ({addNewRequest}) => {
           </div>
           <div>
             <label>Area</label>
-            <input type="text1" value={area}onChange={(event) => setArea(event.target.value)} />
+            <input type="text" value={area}onChange={(event) => setArea(event.target.value)} />
+            <select value={value} onChange={handleChange}>
+              <option value="ETM">ETM</option>
+              <option value="CD6R_2pc">CD6R_2pc</option>
+              <option value="P702">P702</option>
+              <option value="Supermarket">Supermarket</option>
+              <option value="LD71">LD71</option>
+            </select>
           </div>
         <section className="main section">
           <div>
             <label>Reason for Request</label>
-            <input type="text2"value={reasonForRequest}onChange={(event) => setReasonForRequest(event.target.value)} />
+            <input type="text"value={reasonForRequest}onChange={(event) => setReasonForRequest(event.target.value)} />
           </div>
           <div>
             <label>Description of Change</label>
-            <input type="text3"value={descriptionOfChange}onChange={(event) => setDescriptionOfChange(event.target.value)} />
+            <input type="text"value={descriptionOfChange}onChange={(event) => setDescriptionOfChange(event.target.value)} />
           </div>
           <div>
             <label>Tasks</label>
-            <input type="text4" value={tasks} onChange={(event) => setTasks(event.target.value)} />
+            <input type="text" value={tasks} onChange={(event) => setTasks(event.target.value)} />
           </div>
           <div>
             <ButtonHandler type="submit"className="btn btn-primary"style={{ marginTop: "1em" }}>Submit</ButtonHandler>

@@ -35,17 +35,24 @@ def new_request(request):
         request = Request.objects.filter(request_id=request.query_params.get("request_id"))
         serializer = RequestSerializer(request, many=True)
         return Response(serializer.data)
+    
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def approve_or_reject_request(request):
-    try:
+
+    if request.method == 'PUT':
+        serializer = RequestSerializer(data=request.data)
         request_id = int(request.data['request_id'])
-        approver = Request.objects.get(request_id=request_id, user=request.user)
-        is_approved = request.data.get('is_approved', False)
-        is_rejected = request.data.get('is_rejected', False)
-        if is_approved and is_rejected:
-            return Response({'message': 'Cannot approve and reject request at the same time'}, status=status.HTTP_400_BAD_REQUEST)
-        approver.is_approved = is_approved
-        approver.is_rejected = is_rejected
-        approver.save()
-        return Response({'message': 'Request updated'}, status=status.HTTP_200_OK)
-    except (KeyError, ValueError):
-        return Response({'message': 'Invalid request ID or user not authorized'}, status=status.HTTP_400_BAD_REQUEST)
+        if serializer.is_valid():
+            try:
+                approver = Request.objects.get(request_id=request_id)
+                is_approved = request.data.put('is_approved', True)
+                is_rejected = request.data.put('is_rejected', True)
+                if is_approved and is_rejected:
+                    return Response({'message': 'Cannot approve and reject request at the same time'}, status=status.HTTP_400_BAD_REQUEST)
+                approver.is_approved = is_approved
+                approver.is_rejected = is_rejected
+                approver.save()
+                return Response({'message': 'Request updated'}, status=status.HTTP_200_OK)
+            except (KeyError, ValueError):
+                return Response({'message': 'Invalid request ID or user not authorized'}, status=status.HTTP_400_BAD_REQUEST)
