@@ -18,8 +18,7 @@ import Footer from "./components/Footer/Footer";
 
 // Util Imports
 import PrivateRoute from "./utils/PrivateRoute";
-import SearchBar from "./components/SearchBar/SearchBar";
-import ShowAllRequests from "./components/ShowAllRequests/ShowAllRequests";
+import ShowAllRequests from "./pages/ShowAllRequests/ShowAllRequests";
 
 
 const App = () => {
@@ -28,16 +27,22 @@ const App = () => {
   const [user, token] = useAuth();
   useEffect(() => {}, [requests]);
   
-  const getRequests = async () => {
-    let response = await axios.get(`http://127.0.0.1:8000/api/requests/all/`);
-    console.log(response.data);
-    setRequests(response.data);
-  }
+  // const getRequests = async () => {
+  //   let response = await axios.get(`http://127.0.0.1:8000/api/requests/all/`);
+  //   console.log(response.data);
+  //   setRequests(response.data);
+  // }
 
   const addNewRequest = async() => {
     let response = await axios.post(`http://127.0.0.1:8000/api/requests/new/` , requests , {headers:{Authorization: `Bearer ${token}`}})
     console.log(response.data);
     addNewRequest();
+}
+
+async function getAllRequests(){
+  let response = await axios.get('http://127.0.0.1:8000/api/requests/all/', ShowAllRequests);
+  console.log(response.data);
+  setRequests(response.data);
 }
 
   return (
@@ -53,9 +58,10 @@ const App = () => {
                 <PrivateRoute>
                   <HomePage />
                     <div className="flex--container">
-                    <SearchBar query ={query} setQuery={setQuery}/>
-                    <ShowAllRequests parentEntries={requests} query={query}/>
-                    <button onClick={(e) => getRequests()}>See All Requests</button>
+                      <div className="show-all-request-container">
+                        <ShowAllRequests requests={requests}/>
+                      </div>
+                    <button onClick={(e) => getAllRequests()}>See All Requests</button>
                       <div className="left-container">
                         <NewRequest addNewRequest={addNewRequest}/>
                       </div>

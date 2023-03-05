@@ -96,6 +96,16 @@ const NewRequest = ({addNewRequest}) => {
             <ButtonHandler type="submit"className="btn btn-primary"style={{ marginTop: "1em" }}>Submit</ButtonHandler>
           </div>
         </section>
+        <section className="approvers section">
+          <div>
+            <label>Approvers Review</label>
+            <select value={value} onChange={handleChange}>
+              <option value=' '>Choose One</option>
+              <option value='Approve'>Approve</option>
+              <option value='Reject'>Reject</option>
+            </select>
+          </div>
+        </section>
       </form>
     </div>
   );
