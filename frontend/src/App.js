@@ -40,7 +40,7 @@ const App = () => {
 }
 
 async function getAllRequests(){
-  let response = await axios.get('http://127.0.0.1:8000/api/requests/all/', ShowAllRequests);
+  let response = await axios.get('http://127.0.0.1:8000/api/requests/all/');
   console.log(response.data);
   setRequests(response.data);
 }
@@ -61,7 +61,7 @@ async function getAllRequests(){
                       <div className="show-all-request-container">
                         <ShowAllRequests requests={requests}/>
                       </div>
-                    <button onClick={(e) => getAllRequests()}>See All Requests</button>
+                      <button onClick={(e) => getAllRequests()}>See All Requests</button>
                       <div className="left-container">
                         <NewRequest addNewRequest={addNewRequest}/>
                       </div>
@@ -82,3 +82,4 @@ async function getAllRequests(){
 }
 
 export default App;
+

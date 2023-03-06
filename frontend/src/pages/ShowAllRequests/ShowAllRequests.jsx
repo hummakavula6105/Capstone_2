@@ -38,7 +38,8 @@ import axios from "axios";
 const ShowAllRequests = (props) => {
 
   return (
-    <div className="table">
+    <body>
+      <div className="table">
         {props.parentEntries.filter(entry=>
         entry.request_id.includes(props.query) || 
         entry.user.includes(props.query) || 
@@ -53,7 +54,8 @@ const ShowAllRequests = (props) => {
         .map((entry) => {
           return <Request entry={entry} key = {entry.id} />;
         })}
-    </div>
+      </div>
+    </body>
   );
 };
 
