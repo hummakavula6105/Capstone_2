@@ -1,5 +1,5 @@
 // General Imports
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
@@ -11,6 +11,8 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import NewRequest from "./pages/NewRequestPage/NewRequest";
 import BarGraph from "./pages/GraphsPage/Bars";
+import AllRequests from "./pages/AllRequests/AllRequests";
+import AppRejRequest from "./pages/ApproversPage/AppRejRequest";
 
 // Component Imports
 import Navbar from "./components/NavBar/NavBar";
@@ -25,7 +27,9 @@ const App = () => {
   const [requests, setRequests] = useState([]);
   const [query, setQuery] = useState("");
   const [user, token] = useAuth();
-  useEffect(() => {}, [requests]);
+  let navigate = useNavigate();
+
+  useEffect(() => { }, [requests]);
   
   // const getRequests = async () => {
   //   let response = await axios.get(`http://127.0.0.1:8000/api/requests/all/`);
@@ -39,11 +43,16 @@ const App = () => {
     addNewRequest();
 }
 
-async function getAllRequests(){
-  let response = await axios.get('http://127.0.0.1:8000/api/requests/all/');
-  console.log(response.data);
-  setRequests(response.data);
-}
+// async function getAllRequests(){
+//   let response = await axios.get('http://127.0.0.1:8000/api/requests/all/');
+//   console.log(response.data);
+//   setRequests(response.data);
+// }
+  
+  const routeChange = (route) => {
+    let path = `/${route}`;
+    navigate(path);
+  }
 
   return (
     <body>
@@ -59,21 +68,31 @@ async function getAllRequests(){
                   <HomePage />
                     <div className="flex--container">
                       <div className="show-all-request-container">
-                        <ShowAllRequests requests={requests}/>
+                        {/* <ShowAllRequests requests={requests}/> */}
                       </div>
-                      <button onClick={(e) => getAllRequests()}>See All Requests</button>
+                        
+                        <button onClick={(e) => { 
+                          routeChange('all')
+                        }}>See All Requests</button>
+                        
+                        <button onClick={(e) => { 
+                          routeChange('approve_or_reject_request')
+                        }}>For Approvers Only</button>
+
                       <div className="left-container">
                         <NewRequest addNewRequest={addNewRequest}/>
                       </div>
-                    <div className="right-container">
-                      {/* <BarGraph/> */}
-                    </div>
+                      <div className="right-container">
+                        {/* <BarGraph/> */}
+                      </div>
                     </div>
                 </PrivateRoute>
               }
-            />
+          />
+            <Route path="/all" element={<AllRequests />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/approve_or_reject_request" element={<AppRejRequest />} />
           </Routes>
           {/* <Footer /> */}
         </div>

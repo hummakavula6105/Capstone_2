@@ -1,0 +1,42 @@
+.Reviews {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .Review-Card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-right: 10px;
+    width: 350px;
+    height: 600px;
+    background-color: #f8f9fa;
+  }
+  
+  .Review-Header{
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ccc;
+    font-weight: bold;
+    padding: 10px;
+  }
+  
+  .Review-Body{
+    padding: 10px
+  }
+  
+  .Review-Body p {
+    margin-bottom: 10px;
+    
+  }
+  
+  .Review-Body p strong{
+    display: inline-block;
+    min-width: 120px;
+  }
+  
+  .Review-Body p:last-child {
+    margin-bottom: 0;
+  }

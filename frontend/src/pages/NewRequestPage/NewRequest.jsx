@@ -40,22 +40,6 @@ const NewRequest = ({addNewRequest}) => {
     }
   };
 
-  const handleReview = async (event) => {
-    event.preventDefault();
-    let review = {
-      is_approved: isApproved,
-      is_rejected: isRejected,
-    };
-
-    try{
-      let response = await axios.put('http://127.0.0.1:8000/api/requests/approve_or_reject_request/', isApproved, isRejected, {headers:{Authorization: `Bearer ${token}`}});
-      console.log(response.data);
-      addNewRequest();
-    }catch(error){
-      console.log(error.response.data)
-    }
-  };
-
   return (
     <div>
       <label className="New-Request-Label">New Request</label>
@@ -94,16 +78,6 @@ const NewRequest = ({addNewRequest}) => {
           </div>
           <div>
             <ButtonHandler type="submit"className="btn btn-primary"style={{ marginTop: "1em" }}>Submit</ButtonHandler>
-          </div>
-        </section>
-        <section className="approvers section">
-          <div>
-            <label>Approvers Review</label>
-            <select value={value} onChange={handleChange}>
-              <option value=' '>Choose One</option>
-              <option value='Approve'>Approve</option>
-              <option value='Reject'>Reject</option>
-            </select>
           </div>
         </section>
       </form>
