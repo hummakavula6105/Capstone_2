@@ -1,4 +1,4 @@
-import datetime
+from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -36,23 +36,22 @@ def new_request(request):
         serializer = RequestSerializer(request, many=True)
         return Response(serializer.data)
     
-@api_view(['PUT'])
-@permission_classes([IsAuthenticated])
-def approve_or_reject_request(request):
 
-    if request.method == 'PUT':
-        serializer = RequestSerializer(data=request.data)
-        request_id = int(request.data['request_id'])
-        if serializer.is_valid():
-            try:
-                approver = Request.objects.get(request_id=request_id)
-                is_approved = request.data.put('is_approved', True)
-                is_rejected = request.data.put('is_rejected', True)
-                if is_approved and is_rejected:
-                    return Response({'message': 'Cannot approve and reject request at the same time'}, status=status.HTTP_400_BAD_REQUEST)
-                approver.is_approved = is_approved
-                approver.is_rejected = is_rejected
-                approver.save()
-                return Response({'message': 'Request updated'}, status=status.HTTP_200_OK)
-            except (KeyError, ValueError):
-                return Response({'message': 'Invalid request ID or user not authorized'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def approve_or_reject_request(request, pk):
+    req_instance = get_object_or_404(Request, pk=pk)
+    if request.method == 'GET':
+        serializer = RequestSerializer(req_instance)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        try:
+            serializer = RequestSerializer(req_instance, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except(KeyError, ValueError):
+            return Response({'message': 'User not authorized'}, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        req_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

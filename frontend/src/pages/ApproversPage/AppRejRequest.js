@@ -3,6 +3,8 @@ import useAuth from "../../hooks/useAuth";
 import ButtonHandler from "../NewRequestPage/ButtonHandler";
 import axios from "axios";
 import "./AppRejRequest.css";
+import AllRequests from "../AllRequests/AllRequests";
+import ShowAllRequests from "../ShowAllRequests/ShowAllRequests";
 
 
 // const Review = ({addReview}) => { 
@@ -31,8 +33,10 @@ import "./AppRejRequest.css";
 //         }
 //     };
 
+
 function Review() {
-    const [review, setReview] = useState("")
+    const [requests, setRequests] = useState([]);
+    const [review, setReview] = useState([]);
     const [isApproved, setIsApproved] = useAuth();
     const [isRejected, setIsRejected] = useAuth();
     const [comments, setComments] = useState("");
@@ -44,6 +48,7 @@ function Review() {
         let review = {
         is_approved: isApproved,
         is_rejected: isRejected,
+        comments: comments,
         };
       
     useEffect(() => {
@@ -59,10 +64,21 @@ function Review() {
     }, [])
 };
 
+    const getRequests = async () => {
+        let requests = await axios.get('http://127.0.0.1:8000/api/requests/all/')
+        console.log(requests.data);
+        setRequests(requests.data);
+    }
+
     const reviewCards = () => {
         return review.map(req => {
             return (
                 <form onSubmit={HandleSubmit}>
+                    <div>
+                        <button onClick={(e) => getRequests()}>See Requests</button>
+                        <AllRequests setRequests={setRequests}/>
+                        <ShowAllRequests requests={requests}/>
+                    </div>
                     <div className="Review-Card">
                         <div className="Review-Header">
                             Request #{req.id}
