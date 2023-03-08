@@ -50,8 +50,33 @@ function Review() {
         is_rejected: isRejected,
         comments: comments,
         };
+
+        let response = await axios.put('http://127.0.0.1:8000/api/requests/approve_or_reject_request/', review, {headers:{Authorization: `Bearer ${token}`}});
+        console.log(response.data);
+        setReview(response.data);
+    }
       
     useEffect(() => {
+    }, []);
+
+    // useEffect(() => {
+    //     async function getRequests() {
+    //         let requests = await axios.get(
+    //             'http://127.0.0.1:8000/api/requests/all/'
+    //         );
+    //         console.log(requests.data);
+    //         setRequests(requests.data);
+    //     }
+    //     getRequests();
+    // }, []);
+
+
+    async function getRequests() {
+        let requests = await axios.get('http://127.0.0.1:8000/api/requests/all/')
+        console.log(requests.data);
+        setRequests(requests.data);
+    }
+
     async function addReview(){
         let response = await axios.put('http://127.0.0.1:8000/api/requests/approve_or_reject_request/', review, {headers:{Authorization: `Bearer ${token}`}});
         console.log(response.data);
@@ -60,15 +85,6 @@ function Review() {
     
         addReview();
     
-    
-    }, [])
-};
-
-    const getRequests = async () => {
-        let requests = await axios.get('http://127.0.0.1:8000/api/requests/all/')
-        console.log(requests.data);
-        setRequests(requests.data);
-    }
 
     const reviewCards = () => {
         return review.map(req => {
@@ -79,7 +95,7 @@ function Review() {
                         <AllRequests setRequests={setRequests}/>
                         <ShowAllRequests requests={requests}/>
                     </div>
-                    <div className="Review-Card">
+                    <div key={req.id} className="Review-Card">
                         <div className="Review-Header">
                             Request #{req.id}
                         </div>
@@ -93,7 +109,8 @@ function Review() {
                             <p><strong>Description:</strong> {req.description_of_change}</p>
                             <input type="text" value={isApproved}onChange={(event) => setIsApproved(event.target.value)} />
                             <input type="text" value={isRejected}onChange={(event) => setIsRejected(event.target.value)} />
-                            <input type="text" value={comments}>Reason for Rejection</input>
+                            <input type="text" value={comments}/>
+                            <label htmlFor="comments">Reason for Rejection</label>
                         </div>
                     <div>
                         <ButtonHandler type="submit"className="btn btn-primary"style={{ marginTop: "1em" }}>Submit</ButtonHandler>
@@ -103,6 +120,21 @@ function Review() {
             );
         })
     }
+
+    // return (
+    //     <div className="Reviews">
+    //         <form>
+    //             <button onClick={(e) => getRequests()}>See Requests</button>
+    //             <AllRequests setRequests = {setRequests} />
+    //             <ShowAllRequests requests = {requests} />
+    //         </form>
+    //         {review.length > 0 ? (
+    //             reviewCards()
+    //         ) : (
+    //             <p>No new requests</p>
+    //         )}
+    //     </div>
+    //     )
 
     if (review === null) {
         return 'No New Requests';
@@ -114,5 +146,4 @@ function Review() {
         )
     }
 }
-
 export default Review;
